@@ -1,7 +1,8 @@
 // Copyright 2025 Alewa8131
 
-#ifndef CIRCLE
-#define CIRCLE
+
+//#define CIRCLE
+#ifdef CIRCLE
 
 #include <iostream>
 #include <iomanip>
@@ -98,3 +99,21 @@ int main() {
 }
 
 #endif  // CIRCLE
+
+
+#define MATRIX
+#ifdef MATRIX
+
+#include <iostream>
+#include <iomanip>
+#include "../lib_matrix/matrix.h"
+
+int main() {
+    std::cout << "--- Matrix ---" << std::endl;
+
+    
+
+    return 0;
+}
+
+#endif  // MATRIX

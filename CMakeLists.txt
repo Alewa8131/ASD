@@ -18,6 +18,7 @@ add_subdirectory(lib_point)           # подключаем дополните�
 add_subdirectory(lib_point3d)         # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_point3d
 add_subdirectory(lib_circle)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_circle
 add_subdirectory(lib_sphere)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_sphere
+add_subdirectory(lib_matrix)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_matrix
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
