@@ -110,8 +110,28 @@ int main() {
 
 int main() {
     std::cout << "--- Matrix ---" << std::endl;
+    Matrix<int> Matr;
+    int m, n;
 
-    
+    std::cout << "Enter a value for M: ";
+    std::cin >> m;
+    Matr.set_M(m);
+    std::cout << "M = " << Matr.get_M() << std::endl;
+
+    std::cout << "Enter a value for N: ";
+    std::cin >> n;
+    Matr.set_N(n);
+    std::cout << "N = " << Matr.get_N() << std::endl;
+
+    int a;
+
+
+    for (int i = 1; i <= m; i++) {
+        std::cout << "Enter the numbers of line " << i <<" in the amount of " << m << " pieces: ";
+        for (int j = 1; j <= n; j++) {
+            std::cin >> a;
+        }
+    }
 
     return 0;
 }
