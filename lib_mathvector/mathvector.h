@@ -10,14 +10,17 @@ class MathVector : private TVector<T> {
 public:
     MathVector();
     ~MathVector();
-    MathVector(int size);
+    explicit MathVector(size_t size);
 
-    T& at(int index);
-    const T& at(int index) const;
+    T& at(size_t index);
+    const T& at(size_t index) const;
+
+    size_t size() const;
 
     MathVector<T> operator+(const MathVector<T>& other) const;
     MathVector<T> operator-(const MathVector<T>& other) const;
     T operator*(const MathVector<T>& other) const;
+    MathVector<T> operator*(const T& scalar) const;
 
 #ifdef DEBUG
     void debug_print(const std::string& msg) const;
@@ -25,34 +28,52 @@ public:
 };
 
 template <class T>
-MathVector<T>::MathVector() {}
+MathVector<T>::MathVector() : TVector<T>() {}
 
 template <class T>
 MathVector<T>::~MathVector() {}
 
 template <class T>
-MathVector<T>::MathVector(int size) : TVector<T>(size) {
+MathVector<T>::MathVector(size_t size) {
+    if (size > 0) {
+        TVector<T>::assign(size, T{});
+    }
 #ifdef DEBUG
     debug_print("MathVector parameterized constructor called.");
 #endif
 }
 
 template <class T>
-T& MathVector<T>::at(int index) {
+T& MathVector<T>::at(size_t index) {
     return TVector<T>::at(index);
 }
 
 template <class T>
-const T& MathVector<T>::at(int index) const {
+const T& MathVector<T>::at(size_t index) const {
     return TVector<T>::at(index);
 }
+
+template <class T>
+size_t MathVector<T>::size() const {
+    return TVector<T>::size();
+}
+
 
 template <class T>
 MathVector<T> MathVector<T>::operator+(const MathVector<T>& other) const {
 #ifdef DEBUG
     debug_print("MathVector operator+ called.");
 #endif
-    return MathVector<T>();
+    if (size() != other.size()) {
+        throw std::invalid_argument("Vector dimensions must match for addition.");
+    }
+
+    MathVector<T> result(size());
+
+    for (size_t i = 0; i < size(); ++i) {
+        result.at(i) = this->at(i) + other.at(i);
+    }
+    return result;
 }
 
 template <class T>
@@ -60,7 +81,16 @@ MathVector<T> MathVector<T>::operator-(const MathVector<T>& other) const {
 #ifdef DEBUG
     debug_print("MathVector operator- called.");
 #endif
-    return MathVector<T>();
+    if (size() != other.size()) {
+        throw std::invalid_argument("Vector dimensions must match for subtraction.");
+    }
+
+    MathVector<T> result(size());
+
+    for (size_t i = 0; i < size(); ++i) {
+        result.at(i) = this->at(i) - other.at(i);
+    }
+    return result;
 }
 
 template <class T>
@@ -68,7 +98,29 @@ T MathVector<T>::operator*(const MathVector<T>& other) const {
 #ifdef DEBUG
     debug_print("MathVector operator* (scalar product) called.");
 #endif
-    return T();
+    if (size() != other.size()) {
+        throw std::invalid_argument("Vector dimensions must match for scalar product.");
+    }
+
+    T scalar_product = T{};
+
+    for (size_t i = 0; i < size(); ++i) {
+        scalar_product += this->at(i) * other.at(i);
+    }
+    return scalar_product;
+}
+
+template <class T>
+MathVector<T> MathVector<T>::operator*(const T& scalar) const {
+#ifdef DEBUG
+    debug_print("MathVector operator* (scalar multiplication) called.");
+#endif
+    MathVector<T> result(size());
+
+    for (size_t i = 0; i < size(); ++i) {
+        result.at(i) = this->at(i) * scalar;
+    }
+    return result;
 }
 
 #ifdef DEBUG
