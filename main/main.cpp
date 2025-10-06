@@ -106,31 +106,10 @@ int main() {
 
 #include <iostream>
 #include <iomanip>
+#include <exception>
 #include "../lib_matrix/matrix.h"
 #include "../lib_trianglematrix/trianglematrix.h"
 
-template <class T>
-void input_matrix_with_guidance(Matrix<T>& matrix, const std::string& name) {
-    int m = matrix.get_M();
-    int n = matrix.get_N();
-    std::cout << "Enter " << m * n << " values for Matrix " << name << " (" << m << "x" << n << "):" << std::endl;
-    std::cout << "Please enter values row by row, separated by spaces." << std::endl;
-
-    for (int i = 0; i < m; ++i) {
-        std::cout << "Row " << i + 1 << " (" << n << " values): ";
-        for (int j = 0; j < n; ++j) {
-            T temp;
-            std::cin >> temp;
-            matrix.at(i, j) = temp;
-        }
-    }
-}
-
-template <class T>
-void output_matrix_with_formatting(const Matrix<T>& matrix, const std::string& name) {
-    std::cout << "\nMatrix " << name << " (" << matrix.get_M() << "x" << matrix.get_N() << "):" << std::endl;
-    std::cout << matrix;
-}
 
 template<class T>
 void run_matrix_operations(T& A, T& B, T& C) {
@@ -152,10 +131,10 @@ void run_matrix_operations(T& A, T& B, T& C) {
 
         switch (choice) {
         case 1:
-            input_matrix_with_guidance(A, "A");
+            std::cin >> A;
             break;
         case 2:
-            input_matrix_with_guidance(B, "B");
+            std::cin >> B;
             break;
         case 3:
             C = A + B;
@@ -192,26 +171,26 @@ void run_matrix_operations(T& A, T& B, T& C) {
                 continue;
             }
             else if (det_choice == 1 && A.get_M() == A.get_N()) {
-                std::cout << "Determinant of A: " << A.get_determinant() << std::endl;
+                std::cout << "Determinant of A: " << A.determinant() << std::endl;
             }
             else if (det_choice == 2 && B.get_M() == B.get_N()) {
-                std::cout << "Determinant of B: " << B.get_determinant() << std::endl;
+                std::cout << "Determinant of B: " << B.determinant() << std::endl;
             }
             else if (det_choice == 3 && C.get_M() == C.get_N()) {
-                std::cout << "Determinant of C: " << C.get_determinant() << std::endl;
+                std::cout << "Determinant of C: " << C.determinant() << std::endl;
             }
             else {
                 std::cout << "Error: Invalid choice or selected matrix is not square." << std::endl;
             }
             break;
         case 7:
-            output_matrix_with_formatting(A, "A");
+            std::cout << A;
             break;
         case 8:
-            output_matrix_with_formatting(B, "B");
+            std::cout << B;
             break;
         case 9:
-            output_matrix_with_formatting(C, "C");
+            std::cout << C;
             break;
         case 0:
             std::cout << "Exiting..." << std::endl;
@@ -244,16 +223,16 @@ int main() {
         run_matrix_operations(A, B, C);
     }
     else if (matrix_type_choice == 2) {
-        TriangleMatrix<int> T_Result;
-        int n;
-        std::cout << "Enter dimension N for Triangular Matrix T1: ";
-        std::cin >> n;
-        TriangleMatrix<int> T1(n);
-        std::cout << "Enter dimension N for Triangular Matrix T2: ";
-        std::cin >> n;
-        TriangleMatrix<int> T2(n);
-        run_matrix_operations(T1, T2, T_Result);
-    }
+            TriangleMatrix<int> T_Result;
+            int n;
+            std::cout << "Enter dimension N for Triangular Matrix T1: ";
+            std::cin >> n;
+            TriangleMatrix<int> T1(n);
+            std::cout << "Enter dimension N for Triangular Matrix T2: ";
+            std::cin >> n;
+            TriangleMatrix<int> T2(n);
+            run_matrix_operations(T1, T2, T_Result);
+        }
     else {
         std::cout << "Invalid matrix type selected." << std::endl;
     }

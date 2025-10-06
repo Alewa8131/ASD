@@ -6,7 +6,7 @@
 #include "../lib_tvector/tvector.h"
 
 template <class T>
-class MathVector : private TVector<T> {
+class MathVector : public TVector<T> {
 public:
     MathVector();
     ~MathVector();
@@ -121,6 +121,21 @@ MathVector<T> MathVector<T>::operator*(const T& scalar) const {
         result.at(i) = this->at(i) * scalar;
     }
     return result;
+}
+
+template<class T>
+std::ostream& operator<<(std::ostream& os, const MathVector<T>& vec) {
+    size_t vec_size = vec.size();
+
+    os << "[";
+    for (size_t i = 0; i < vec_size; ++i) {
+        os << std::setw(6) << vec[i];
+        if (i < vec_size - 1) {
+            os << " ";
+        }
+}
+    os << "]";
+    return os;
 }
 
 #ifdef DEBUG
