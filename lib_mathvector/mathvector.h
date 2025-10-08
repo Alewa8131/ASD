@@ -11,6 +11,7 @@ public:
     MathVector();
     ~MathVector();
     explicit MathVector(size_t size);
+    MathVector(std::initializer_list<T> init);
 
     T& at(size_t index);
     const T& at(size_t index) const;
@@ -42,6 +43,9 @@ MathVector<T>::MathVector(size_t size) {
     debug_print("MathVector parameterized constructor called.");
 #endif
 }
+
+template <class T>
+MathVector<T>::MathVector(std::initializer_list<T> init) : TVector<T>(init) {}
 
 template <class T>
 T& MathVector<T>::at(size_t index) {
@@ -133,7 +137,7 @@ std::ostream& operator<<(std::ostream& os, const MathVector<T>& vec) {
         if (i < vec_size - 1) {
             os << " ";
         }
-}
+    }
     os << "]";
     return os;
 }
