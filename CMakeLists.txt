@@ -22,6 +22,7 @@ add_subdirectory(lib_tvector)         # подключаем дополните�
 add_subdirectory(lib_mathvector)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_mathvector
 add_subdirectory(lib_matrix)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_matrix
 add_subdirectory(lib_trianglematrix)  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_trianglematrix
+add_subdirectory(Algorithms)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем Algorithms
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
