@@ -28,7 +28,25 @@ public:
     void pop_back();
     void erase(size_t pos);
     void erase(Node<T>* node);
+
+
+    class Iterator {
+        Node<T>* _current;
+    public:
+        Iterator();
+        Iterator(Node<T>* node);
+
+        Iterator& operator++();
+        Iterator operator++(int);
+        T& operator*() const;
+        bool operator==(const Iterator& other) const;
+        bool operator!=(const Iterator& other) const;
+    };
+
+    Iterator begin();
+    Iterator end();
 };
+
 
 template <class T>
 List<T>::List() : _head(nullptr), _tail(nullptr), _count(0) {}
@@ -222,4 +240,55 @@ void List<T>::erase(Node<T>* node) {
 
     delete node;
     _count--;
+}
+
+
+
+template <class T>
+List<T>::Iterator::Iterator() : _current(nullptr) {}
+
+template <class T>
+List<T>::Iterator::Iterator(Node<T>* node) : _current(node) {}
+
+template <class T>
+typename List<T>::Iterator List<T>::begin() {
+    return Iterator(_head);
+}
+
+template <class T>
+typename List<T>::Iterator List<T>::end() {
+    return Iterator(nullptr);
+}
+
+template <class T>
+typename List<T>::Iterator& List<T>::Iterator::operator++() {
+    if (_current) {
+        _current = _current->_next;
+    }
+    return *this;
+}
+
+template <class T>
+typename List<T>::Iterator List<T>::Iterator::operator++(int) {
+    typename List<T>::Iterator temp = *this;
+    ++(*this);
+    return temp;
+}
+
+template <class T>
+T& List<T>::Iterator::operator*() const {
+    if (!_current) {
+        throw std::out_of_range("Dereferencing end() iterator");
+    }
+    return _current->_value;
+}
+
+template <class T>
+bool List<T>::Iterator::operator==(const Iterator& other) const {
+    return _current == other._current;
+}
+
+template <class T>
+bool List<T>::Iterator::operator!=(const Iterator& other) const {
+    return _current != other._current;
 }

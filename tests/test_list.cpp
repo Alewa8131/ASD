@@ -165,3 +165,69 @@ TEST(ListTest, StatusFunction_IsEmpty) {
     list.pop_front();
     EXPECT_TRUE(list.is_empty());
 }
+
+
+TEST(ListTest, Iterator_ReadAndIncrement) {
+    List<int> list;
+    list.push_back(10);
+    list.push_back(20);
+    list.push_back(30);
+
+    List<int>::Iterator it = list.begin();
+
+    ASSERT_EQ(*it, 10);
+
+    ++it;
+    ASSERT_EQ(*it, 20);
+
+    List<int>::Iterator old_it = it++;
+    ASSERT_EQ(*old_it, 20);
+    ASSERT_EQ(*it, 30);
+
+    ++it;
+    ASSERT_TRUE(it == list.end());
+    ASSERT_FALSE(it != list.end());
+}
+
+TEST(ListTest, Iterator_WriteAccess) {
+    List<std::string> list;
+    list.push_back("Hello");
+    list.push_back("List");
+
+    List<std::string>::Iterator it = list.begin();
+
+    *it = "Hi";
+    ASSERT_EQ(list.head()->_value, "Hi");
+
+    ++it;
+
+    *it = "Iterator";
+    ASSERT_EQ(list.head()->_next->_value, "Iterator");
+
+    std::string result = "";
+    for (const auto& val : list) {
+        result += val + " ";
+    }
+    ASSERT_EQ(result, "Hi Iterator ");
+}
+
+TEST(ListTest, Iterator_EmptyListAndEndBehavior) {
+    List<int> empty_list;
+
+    List<int>::Iterator it_empty = empty_list.begin();
+    ASSERT_TRUE(it_empty == empty_list.end());
+    ASSERT_EQ(empty_list.begin(), empty_list.end());
+
+    List<int>::Iterator end_it = empty_list.end();
+
+    ASSERT_NO_THROW(++end_it);
+    ASSERT_NO_THROW(end_it++);
+    ASSERT_TRUE(end_it == empty_list.end());
+
+    List<int> list;
+    list.push_back(1);
+
+    List<int>::Iterator it_end = list.end();
+    EXPECT_THROW(*it_end, std::out_of_range);
+}
+
