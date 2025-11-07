@@ -27,6 +27,7 @@ add_subdirectory(lib_queue)           # подключаем дополните�
 add_subdirectory(lib_priority_queue)  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_priority_queue
 add_subdirectory(lib_node)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_node
 add_subdirectory(lib_list)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_list
+add_subdirectory(lib_double_list)     # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_double_list
 add_subdirectory(Algorithms)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем Algorithms
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
