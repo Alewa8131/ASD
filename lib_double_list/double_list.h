@@ -29,6 +29,24 @@ public:
     void pop_back();
     void erase(size_t pos);
     void erase(DoubleNode<T>* node);
+
+    class Iterator {
+        DoubleNode<T>* _current;
+    public:
+        Iterator();
+        Iterator(DoubleNode<T>* node);
+
+        Iterator& operator++();
+        Iterator operator++(int);
+        Iterator& operator--();
+        Iterator operator--(int);
+        T& operator*() const;
+        bool operator==(const Iterator& other) const;
+        bool operator!=(const Iterator& other) const;
+    };
+
+    Iterator begin();
+    Iterator end();
 };
 
 
@@ -103,6 +121,10 @@ template <class T>
 void DoubleList<T>::insert(DoubleNode<T> *node, const T& val) {
     if (node == nullptr || is_empty()) {
         throw std::logic_error("insert error: an empty object is passed");
+    }
+    if (node->_next == nullptr) {
+        push_back(val);
+        return;
     }
 
     DoubleNode<T>* new_node = new DoubleNode<T>(val);
@@ -188,11 +210,11 @@ void DoubleList<T>::erase(size_t pos) {
     if (is_empty()) { throw std::logic_error("erase error: list is empty"); }
     if (pos >= _count) { throw std::out_of_range("erase error: position out of range"); }
     if (pos == 0) {
-        pop_front(val);
+        pop_front();
         return;
     }
     if (pos == _count-1) {
-        pop_back(val);
+        pop_back();
         return;
     }
 
@@ -230,5 +252,74 @@ void DoubleList<T>::erase(DoubleNode<T>* node) {
 
     delete node;
     _count--;
+}
+
+
+template <class T>
+DoubleList<T>::Iterator::Iterator() : _current(nullptr) {}
+
+template <class T>
+DoubleList<T>::Iterator::Iterator(DoubleNode<T>* node) : _current(node) {}
+
+template <class T>
+typename DoubleList<T>::Iterator DoubleList<T>::begin() {
+    if (_head == nullptr) {
+        return end();
+    }
+    return Iterator(_head);
+}
+
+template <class T>
+typename DoubleList<T>::Iterator DoubleList<T>::end() {
+    return Iterator(nullptr);
+}
+
+template <class T>
+typename DoubleList<T>::Iterator& DoubleList<T>::Iterator::operator++() {
+    if (_current) {
+        _current = _current->_next;
+    }
+    return *this;
+}
+
+template <class T>
+typename DoubleList<T>::Iterator DoubleList<T>::Iterator::operator++(int) {
+    typename DoubleList<T>::Iterator temp = *this;
+    ++(*this);
+    return temp;
+}
+
+
+template <class T>
+typename DoubleList<T>::Iterator& DoubleList<T>::Iterator::operator--() {
+    if (_current) {
+        _current = _current->_prev;
+    }
+    return *this;
+}
+
+template <class T>
+typename DoubleList<T>::Iterator DoubleList<T>::Iterator::operator--(int) {
+    typename DoubleList<T>::Iterator temp = *this;
+    --(*this);
+    return temp;
+}
+
+template <class T>
+T& DoubleList<T>::Iterator::operator*() const {
+    if (!_current) {
+        throw std::out_of_range("Dereferencing end() iterator");
+    }
+    return _current->_value;
+}
+
+template <class T>
+bool DoubleList<T>::Iterator::operator==(const Iterator& other) const {
+    return _current == other._current;
+}
+
+template <class T>
+bool DoubleList<T>::Iterator::operator!=(const Iterator& other) const {
+    return _current != other._current;
 }
 
