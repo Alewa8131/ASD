@@ -325,3 +325,129 @@ TEST(TVectorTest, FindAllEmptyResult) {
     TVector<size_t> result = find_all(vec, 0);
     EXPECT_EQ(0u, result.size());
 }
+
+
+TEST(TVectorTest, Iterator_EmptyVectorIterating) {
+    TVector<int> vec;
+    EXPECT_EQ(vec.Ibegin(), vec.Iend());
+    int count = 0;
+    for (TVector<int>::Iterator it = vec.Ibegin(); it != vec.Iend(); ++it) {
+        count++;
+    }
+    EXPECT_EQ(0, count);
+}
+
+TEST(TVectorTest, Iterator_ForwardIterationBasic) {
+    TVector<int> vec = { 1, 2, 3, 4, 5 };
+    std::vector<int> expected = { 1, 2, 3, 4, 5 };
+    std::vector<int> result;
+
+    for (int val : vec) {
+        result.push_back(val);
+    }
+    EXPECT_EQ(expected, result);
+}
+
+TEST(TVectorIteratorTest, ForwardIterationSkipDeleted) {
+    TVector<int> vec = { 10, 20, 30, 40, 50 };
+    vec.erase(1);
+    vec.erase(2);
+
+    int expected_values[] = { 10, 30, 50 };
+    int expected_index = 0;
+
+    for (TVector<int>::Iterator it = vec.Ibegin(); it != vec.Iend(); ++it) {
+        EXPECT_EQ(expected_values[expected_index], *it);
+        expected_index++;
+    }
+    EXPECT_EQ(3u, vec.size());
+}
+
+TEST(TVectorIteratorTest, WriteAccessThroughDereference) {
+    TVector<int> vec = { 1, 2, 3 };
+    *vec.Ibegin() = 99;
+    EXPECT_EQ(99, vec.at(0));
+}
+
+TEST(TVectorIteratorTest, WriteAccessInLoop) {
+    TVector<int> vec = { 1, 2, 3, 4, 5 };
+    int expected_values[] = { 2, 4, 6, 8, 10 };
+    int multiplier = 2;
+
+    for (int& val : vec) {
+        val *= multiplier;
+    }
+
+    for (size_t i = 0; i < vec.size(); ++i) {
+        EXPECT_EQ(expected_values[i], vec.at(i));
+    }
+}
+
+TEST(TVectorIteratorTest, WriteAccessSkipDeleted) {
+    TVector<int> vec = { 1, 2, 3, 4, 5 };
+    vec.erase(1);
+
+    TVector<int>::Iterator it = vec.Ibegin();
+    ++it;
+    *it = 333;
+
+    EXPECT_EQ(1, vec.at(0));
+    EXPECT_EQ(333, vec.at(1));
+    EXPECT_EQ(4, vec.at(2));
+}
+
+TEST(TVectorIteratorTest, IncrementAndDecrementOperators) {
+    TVector<int> vec = { 1, 2, 3, 4, 5 };
+
+    TVector<int>::Iterator it = vec.Ibegin();
+    ++it;
+    EXPECT_EQ(2, *it);
+
+    auto next_it = it++;
+    EXPECT_EQ(2, *next_it);
+    EXPECT_EQ(3, *it);
+
+    --it;
+    EXPECT_EQ(2, *it);
+
+    auto prev_it = it--;
+    EXPECT_EQ(2, *prev_it);
+    EXPECT_EQ(1, *it);
+}
+
+TEST(TVectorIteratorTest, PlusEqualOperator) {
+    TVector<int> vec = { 10, 20, 30, 40, 50, 60 };
+    vec.erase(2); // 30
+    vec.erase(3); // 50
+
+    // 10, 20, 40, 60
+    TVector<int>::Iterator it = vec.Ibegin();
+
+    it += 2;
+    EXPECT_EQ(40, *it);
+
+    it += 1;
+    EXPECT_EQ(60, *it);
+
+    it += 10;
+    EXPECT_EQ(vec.Iend(), it);
+}
+
+TEST(TVectorIteratorTest, MinusEqualOperator) {
+    TVector<int> vec = { 10, 20, 30, 40, 50, 60 };
+    vec.erase(1); // 20
+    vec.erase(3); // 50
+
+    // 10, 30, 40, 60
+    TVector<int>::Iterator it = vec.Iend();
+    --it;
+
+    it -= 1;
+    EXPECT_EQ(40, *it);
+
+    it -= 2;
+    EXPECT_EQ(10, *it);
+
+    it -= 10;
+    EXPECT_EQ(10, *it);
+}

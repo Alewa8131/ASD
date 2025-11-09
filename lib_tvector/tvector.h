@@ -69,6 +69,32 @@ public:
     T& operator[](size_t pos) noexcept;
     const T& operator[](size_t pos) const noexcept;
 
+    
+    class Iterator {
+        TVector<T>* _vector;
+        size_t _current_physical_index;
+
+        void find_next_busy();
+        void find_prev_busy();
+    public:
+        Iterator();
+        Iterator(TVector<T>* vec, size_t start_index);
+
+        T& operator*() const;
+        T* operator->() const;
+        bool operator==(const Iterator& other) const;
+        bool operator!=(const Iterator& other) const;
+
+        Iterator& operator++();
+        Iterator operator++(int);
+        Iterator& operator+=(int n);
+
+        Iterator& operator--();
+        Iterator operator--(int);
+        Iterator& operator-=(int n);
+    };
+    Iterator Ibegin();
+    Iterator Iend();
 
     template <class T>
     friend void shuffle(TVector<T>& vec);
@@ -578,6 +604,135 @@ void TVector<T>::my_copy(InputIt first, InputIt last, OutputIt dest) {
         ++first;
         ++dest;
     }
+}
+
+
+template<class T>
+TVector<T>::Iterator::Iterator()
+    : _vector(nullptr), _current_physical_index(0) {}
+
+template<class T>
+TVector<T>::Iterator::Iterator(TVector<T>* vec, size_t start_index)
+    : _vector(vec), _current_physical_index(start_index)
+{
+    if (_vector && _current_physical_index < _vector->_capacity &&
+        _vector->_states[_current_physical_index] != busy)
+    {
+        find_next_busy();
+    }
+}
+
+template<class T>
+void TVector<T>::Iterator::find_next_busy() {
+    while (_current_physical_index < _vector->_capacity &&
+        _vector->_states[_current_physical_index] != busy)
+    {
+        ++_current_physical_index;
+    }
+}
+
+template<class T>
+void TVector<T>::Iterator::find_prev_busy() {
+    if (_current_physical_index == 0) return;
+
+    do {
+        --_current_physical_index;
+        if (_vector->_states[_current_physical_index] == busy)
+            return;
+    } while (_current_physical_index > 0);
+
+    if (_vector->_states[0] != busy)
+        _current_physical_index = _vector->_capacity;
+}
+
+template<class T>
+T& TVector<T>::Iterator::operator*() const {
+    return _vector->_data[_current_physical_index];
+}
+
+template<class T>
+T* TVector<T>::Iterator::operator->() const {
+    return &_vector->_data[_current_physical_index];
+}
+
+template<class T>
+bool TVector<T>::Iterator::operator==(const Iterator& other) const {
+    return _vector == other._vector &&
+        _current_physical_index == other._current_physical_index;
+}
+
+template<class T>
+bool TVector<T>::Iterator::operator!=(const Iterator& other) const {
+    return !(*this == other);
+}
+
+template<class T>
+typename TVector<T>::Iterator& TVector<T>::Iterator::operator++() {
+    if (_current_physical_index < _vector->_capacity) {
+        ++_current_physical_index;
+        find_next_busy();
+    }
+    return *this;
+}
+
+template<class T>
+typename TVector<T>::Iterator TVector<T>::Iterator::operator++(int) {
+    Iterator tmp = *this;
+    ++(*this);
+    return tmp;
+}
+
+template<class T>
+typename TVector<T>::Iterator& TVector<T>::Iterator::operator--() {
+    if (_current_physical_index == _vector->_capacity) {
+        _current_physical_index = _vector->_capacity;
+        find_prev_busy();
+    }
+    else {
+        find_prev_busy();
+    }
+    return *this;
+}
+
+template<class T>
+typename TVector<T>::Iterator TVector<T>::Iterator::operator--(int) {
+    Iterator tmp = *this;
+    --(*this);
+    return tmp;
+}
+
+template<class T>
+typename TVector<T>::Iterator& TVector<T>::Iterator::operator+=(int n) {
+    if (n >= 0) {
+        while (n-- > 0 && _current_physical_index < _vector->_capacity)
+            ++(*this);
+    }
+    else {
+        *this -= -n;
+    }
+    return *this;
+}
+
+template<class T>
+typename TVector<T>::Iterator& TVector<T>::Iterator::operator-=(int n) {
+    if (n >= 0) {
+        while (n-- > 0)
+            --(*this);
+    }
+    else {
+        *this += -n;
+    }
+    return *this;
+}
+
+template<class T>
+typename TVector<T>::Iterator TVector<T>::Ibegin() {
+    return Iterator(this, 0);
+}
+
+template<class T>
+typename TVector<T>::Iterator TVector<T>::Iend() {
+    return Iterator(this, _capacity);
 }
 
 
