@@ -94,3 +94,102 @@ TEST(ReadExpressionTest, NestedBracketsOk) {
 TEST(ReadExpressionTest, NestedBracketsBroken) {
     EXPECT_THROW(read_expression("((2 + 3) * (4 + 5)"), std::runtime_error);
 }
+
+
+TEST(ReadExpressionTest, Valid_Sin) {
+    EXPECT_NO_THROW(read_expression("sin(x)"));
+}
+
+TEST(ReadExpressionTest, Valid_Cos) {
+    EXPECT_NO_THROW(read_expression("cos(y + 1)"));
+}
+
+TEST(ReadExpressionTest, Valid_Tg) {
+    EXPECT_NO_THROW(read_expression("tg(5)"));
+}
+
+TEST(ReadExpressionTest, Valid_Ln) {
+    EXPECT_NO_THROW(read_expression("ln(10)"));
+}
+
+TEST(ReadExpressionTest, Valid_Exp) {
+    EXPECT_NO_THROW(read_expression("exp(x + y)"));
+}
+
+TEST(ReadExpressionTest, Valid_FunctionsCombination) {
+    EXPECT_NO_THROW(read_expression("sin(x) + cos(y)"));
+}
+
+
+TEST(ReadExpressionTest, Invalid_FunctionWithoutBrackets) {
+    EXPECT_THROW(read_expression("sin x"), std::runtime_error);
+}
+
+TEST(ReadExpressionTest, Invalid_EmptyFunctionArgs) {
+    EXPECT_THROW(read_expression("cos()"), std::runtime_error);
+}
+
+TEST(ReadExpressionTest, Invalid_UnknownFunction) {
+    EXPECT_THROW(read_expression("abc(x)"), std::runtime_error);
+}
+
+
+TEST(ReadExpressionTest, Valid_AbsSimple) {
+    EXPECT_NO_THROW(read_expression("|x|"));
+}
+
+TEST(ReadExpressionTest, Valid_AbsExpression) {
+    EXPECT_NO_THROW(read_expression("|x + y|"));
+}
+
+TEST(ReadExpressionTest, Valid_NestedAbs) {
+    EXPECT_NO_THROW(read_expression("||x||"));
+}
+
+TEST(ReadExpressionTest, Valid_AbsAndFunctions) {
+    EXPECT_NO_THROW(read_expression("|sin(x)|"));
+}
+
+
+TEST(ReadExpressionTest, Invalid_Abs_NoClosing) {
+    EXPECT_THROW(read_expression("|x"), std::runtime_error);
+}
+
+TEST(ReadExpressionTest, Invalid_Abs_Empty) {
+    EXPECT_THROW(read_expression("||"), std::runtime_error);
+}
+
+TEST(ReadExpressionTest, Invalid_Abs_DoubleOpen) {
+    EXPECT_THROW(read_expression("|||x|"), std::runtime_error);
+}
+
+
+TEST(ReadExpressionTest, Valid_UnaryMinus_Number) {
+    EXPECT_NO_THROW(read_expression("-5"));
+}
+
+TEST(ReadExpressionTest, Valid_UnaryMinus_Variable) {
+    EXPECT_NO_THROW(read_expression("-x"));
+}
+
+TEST(ReadExpressionTest, Valid_UnaryMinus_Expression) {
+    EXPECT_NO_THROW(read_expression("-(x + 2)"));
+}
+
+TEST(ReadExpressionTest, Valid_UnaryMinus_Combined) {
+    EXPECT_NO_THROW(read_expression("3 * -x + -sin(y)"));
+}
+
+TEST(ReadExpressionTest, Valid_UnaryMinus_Nested) {
+    EXPECT_NO_THROW(read_expression("-(-x + 5)"));
+}
+
+
+TEST(ReadExpressionTest, MegaExpression_AllFeatures) {
+    EXPECT_NO_THROW(read_expression(
+        "|sin(x_1 + 10) + cos(y_2 - 3)| * "
+        "{ln(15 + tg(z)) - exp(a_b)} ^ "
+        "[x + y * -(z - 7)] + "
+        "||x - y||"
+    ));
+}
