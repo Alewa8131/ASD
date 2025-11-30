@@ -33,6 +33,7 @@ add_subdirectory(lib_listqueue)       # подключаем дополните�
 add_subdirectory(lib_dsu)             # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_dsu
 add_subdirectory(lib_lexem)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_lexem
 add_subdirectory(lib_parser)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_parser
+add_subdirectory(lib_expression)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_expression
 add_subdirectory(Algorithms)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем Algorithms
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
