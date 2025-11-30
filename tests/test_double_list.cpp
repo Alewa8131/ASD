@@ -265,6 +265,21 @@ TEST(DoubleListTest, Iterator_BackwardIteration_Modified) {
     ASSERT_TRUE(it == nullptr);
 }
 
+TEST(DoubleListTest, Iterator_BackwardIterationWithFor) {
+    DoubleList<int> list;
+    list.push_back(10);
+    list.push_back(20);
+    list.push_back(30); // 10 20 30
+
+    int i = 3;
+
+    DoubleList<int>::Iterator it = list.begin();
+    for (auto it = list.rbegin(); it != list.rend(); it--) {
+        ASSERT_EQ(*it, 10*i);
+        i--;
+    }
+}
+
 TEST(DoubleListTest, Iterator_ReadWriteAccess) {
     DoubleList<int> list;
     list.push_back(1);

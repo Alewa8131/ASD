@@ -47,6 +47,8 @@ public:
 
     Iterator begin();
     Iterator end();
+    Iterator rbegin();
+    Iterator rend();
 };
 
 
@@ -271,6 +273,19 @@ typename DoubleList<T>::Iterator DoubleList<T>::begin() {
 
 template <class T>
 typename DoubleList<T>::Iterator DoubleList<T>::end() {
+    return Iterator(nullptr);
+}
+
+template <class T>
+typename DoubleList<T>::Iterator DoubleList<T>::rbegin() {
+    if (_tail == nullptr) {
+        return rend();
+    }
+    return Iterator(_tail);
+}
+
+template <class T>
+typename DoubleList<T>::Iterator DoubleList<T>::rend() {
     return Iterator(nullptr);
 }
 
