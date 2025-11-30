@@ -29,6 +29,8 @@ public:
     void erase(size_t pos);
     void erase(Node<T>* node);
 
+    List<T>& operator=(const List<T>& other);
+
 
     class Iterator {
         Node<T>* _current;
@@ -45,6 +47,9 @@ public:
 
     Iterator begin();
     Iterator end();
+
+    Iterator begin() const;
+    Iterator end() const;
 };
 
 
@@ -242,6 +247,19 @@ void List<T>::erase(Node<T>* node) {
     _count--;
 }
 
+template<class T>
+List<T>& List<T>::operator=(const List<T>& other) {
+    if (this == &other) return *this;
+
+    while (!is_empty()) pop_front();
+
+    for (Node<T>* cur = other._head; cur != nullptr; cur = cur->_next) {
+        push_back(cur->_value);
+    }
+
+    return *this;
+}
+
 
 
 template <class T>
@@ -257,6 +275,16 @@ typename List<T>::Iterator List<T>::begin() {
 
 template <class T>
 typename List<T>::Iterator List<T>::end() {
+    return Iterator(nullptr);
+}
+
+template <class T>
+typename List<T>::Iterator List<T>::begin() const {
+    return Iterator(_head);
+}
+
+template <class T>
+typename List<T>::Iterator List<T>::end() const {
     return Iterator(nullptr);
 }
 
