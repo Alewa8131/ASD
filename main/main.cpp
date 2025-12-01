@@ -101,7 +101,7 @@ int main() {
 #endif  // CIRCLE
 
 
-#define MATRIX
+//#define MATRIX
 #ifdef MATRIX
 
 #include <iostream>
@@ -241,3 +241,226 @@ int main() {
 }
 
 #endif  // MATRIX
+
+#define EXPRESSION
+#ifdef EXPRESSION
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <exception>
+
+#include "../lib_tvector/tvector.h"
+#include "../lib_expression/expression.h"
+
+struct ExpressionItem {
+    int id = 0;
+    Expression expr = Expression("0");
+
+    ExpressionItem() = default;
+    ExpressionItem(int _id, const std::string& s)
+        : id(_id), expr(s) {}
+};
+
+void print_table(const TVector<ExpressionItem>& items) {
+    std::cout << "\n+--------------------------------------------------------------------------------+\n";
+    std::cout << "| ID  | EXPRESSION                                   | VARIABLES VALUES          |\n";
+    std::cout << "+--------------------------------------------------------------------------------+\n";
+
+    for (auto it = items.begin(); it != items.end(); ++it) {
+        std::cout << "| "
+            << std::setw(3) << it->id << " | "
+            << std::setw(44) << std::left << it->expr.get_source() << " | ";
+
+        std::string vars;
+        for (auto v = it->expr.get_variables().begin(); v != it->expr.get_variables().end(); ++v) {
+            vars += (*v).name + " = ";
+            if ((*v).value == DBL_MAX) vars += "?";
+            else {
+                vars += std::to_string((*v).value);
+                vars.pop_back();
+                vars.pop_back();
+                vars.pop_back();
+                vars.pop_back();
+            }
+            vars += ", ";
+        }
+        if (!vars.empty()) vars.pop_back(), vars.pop_back();
+
+        std::cout << std::setw(26) << vars;
+        std::cout << "|\n";
+    }
+
+    std::cout << "+--------------------------------------------------------------------------------+\n";
+}
+
+int find_expression_index(const TVector<ExpressionItem>& vec, int id) {
+    int idx = 0;
+    for (auto it = vec.begin(); it != vec.end(); ++it, ++idx) {
+        if (it->id == id)
+            return idx;
+    }
+    return -1;
+}
+
+
+int main() {
+    TVector<ExpressionItem> expressions;
+    int next_id = 1;
+
+    int choice = -1;
+
+    while (choice != 0) {
+        print_table(expressions);
+
+        std::cout << "\nMenu:\n";
+        std::cout << "1. Create new expression\n";
+        std::cout << "2. Delete expression\n";
+        std::cout << "3. Set variables\n";
+        std::cout << "4. Calculate expression value\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Your choice: ";
+        std::cin >> choice;
+        std::cin.ignore();
+
+        try {
+            switch (choice) {
+            case 1: {
+                std::string expr;
+                std::cout << "Enter expression: ";
+                std::getline(std::cin, expr);
+
+                try {
+                    ExpressionItem item(next_id, expr);
+                    expressions.push_back(item);
+                    ++next_id;
+                    std::cout << "Expression added successfully.\n";
+                }
+                catch (const std::exception& e) {
+                    std::cout << "" << e.what() << "\n";
+                }
+
+                break;
+            }
+
+            case 2: {
+                int id;
+                std::cout << "Enter expression ID to delete: ";
+                std::cin >> id;
+
+                int idx = find_expression_index(expressions, id);
+                if (idx >= 0) {
+                    expressions.erase(idx);
+                    std::cout << "Expression deleted.\n";
+                }
+                else {
+                    std::cout << "Expression not found.\n";
+                }
+                break;
+            }
+
+            case 3: {
+                int id;
+                std::cout << "Enter expression ID: ";
+                std::cin >> id;
+
+                int idx = find_expression_index(expressions, id);
+                if (idx < 0) {
+                    std::cout << "Expression not found.\n";
+                    break;
+                }
+
+                Expression& expr = expressions[idx].expr;
+                auto& vars = expr.get_variables();
+
+                std::cout << "Setting values for " << vars.size() << " variables.\n";
+
+                for (List<Lexem>::Iterator it = vars.begin(); it != vars.end(); ++it) {
+                    double value = 0;
+                    bool valid = false;
+
+                    while (!valid) {
+                        std::string input;
+                        std::cout << (*it).name << " = ";
+                        std::cin >> input;
+
+                        valid = true;
+                        int dot_count = 0;
+
+                        for (char c : input) {
+                            if (c == '.') {
+                                dot_count++;
+                                if (dot_count > 1) {
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                            else if (!is_digit(c)) {
+                                valid = false;
+                                break;
+                            }
+                        }
+
+                        if (valid) {
+                            try { value = std::stod(input); }
+                            catch (...) { valid = false; }
+                        }
+
+                        if (!valid) {
+                            std::cout << "Invalid input. Please enter a number.\n";
+                        }
+                    }
+
+                    expr.set_variable((*it).name, value);
+                }
+
+                std::cout << "Variables updated.\n";
+                break;
+            }
+
+            case 4: {
+                int id;
+                std::cout << "Enter expression ID: ";
+                std::cin >> id;
+
+                int idx = find_expression_index(expressions, id);
+                if (idx < 0) {
+                    std::cout << "Expression not found.\n";
+                    break;
+                }
+
+                Expression& expr = expressions[idx].expr;
+
+                for (auto it = expr.get_variables().begin(); it != expr.get_variables().end(); ++it) {
+                    if ((*it).value == DBL_MAX) {
+                        std::cout << "Enter value for variable '" << (*it).name << "': ";
+                        std::cin >> (*it).value;
+                    }
+                }
+
+                try {
+                    double result = expr.calculate();
+                    std::cout << "Result = " << result << "\n";
+                }
+                catch (const std::exception& e) {
+                    std::cout << "Error: " << e.what() << "\n";
+                }
+
+                break;
+            }
+
+            case 0:
+                std::cout << "Exiting...\n";
+                break;
+
+            default:
+                std::cout << "Invalid choice. Try again.\n";
+            }
+        }
+        catch (const std::exception& e) {
+            std::cout << "\nERROR:\n" << e.what() << "\n";
+        }
+    }
+
+    return 0;
+}
+#endif  // EXPRESSION
