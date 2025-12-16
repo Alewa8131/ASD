@@ -106,24 +106,8 @@ int count_islands(int(&grid)[R][C]) {
         for (int c = 0; c < C; c++) {
             if (grid[r][c] == 1) {
                 int root = dsu.find(r * C + c);
-
-                bool seen = false;
-
-                for (int rr = 0; rr < R; rr++) {
-                    for (int cc = 0; cc < C; cc++) {
-                        if (grid[rr][cc] == -1 &&
-                            dsu.find(rr * C + cc) == root) {
-
-                            seen = true;
-                            break;
-                        }
-                    }
-                    if (seen) break;
-                }
-
-                if (!seen) {
+                if (root == r * C + c) {
                     count++;
-                    grid[r][c] = -1;
                 }
             }
         }
