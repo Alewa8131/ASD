@@ -2,7 +2,7 @@
 
 #ifndef LIB_VECTOR_VECTOR_H_
 #define LIB_VECTOR_VECTOR_H_
-
+#pragma once
 #include <iostream>
 #include <string>
 #include <initializer_list>

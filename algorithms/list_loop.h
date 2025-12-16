@@ -1,5 +1,6 @@
 // Copyright 2025 Alewa8131
 
+#pragma once
 #include <iostream>
 #include "../lib_list/list.h"
 

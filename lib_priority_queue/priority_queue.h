@@ -1,5 +1,8 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_PRIORITYQUEUE_PRIORITYQUEUE_H_
+#define LIB_PRIORITYQUEUE_PRIORITYQUEUE_H_
+#pragma once
 #include <stdexcept>
 
 template <class T>
@@ -125,3 +128,5 @@ template<class T>
 bool PriorityQueue<T>::is_full() const noexcept {
     return _count == _size;
 }
+
+#endif  // LIB_PRIORITYQUEUE_PRIORITYQUEUE_H_

@@ -1,5 +1,8 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_STACK_STACK_H_
+#define LIB_STACK_STACK_H_
+#pragma once
 #include <stdexcept>
 
 template <class T>
@@ -82,3 +85,5 @@ template<class T>
 void Stack<T>::clear() noexcept {
     _top = -1;
 }
+
+#endif  // LIB_STACK_STACK_H_

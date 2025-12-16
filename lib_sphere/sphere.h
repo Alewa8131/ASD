@@ -1,10 +1,10 @@
 // Copyright 2025 Alewa8131
 
-#include "../lib_circle/circle.h"
-#include "../lib_point3d/point3d.h"
 #ifndef LIB_SPHERE_SPHERE_H_
 #define LIB_SPHERE_SPHERE_H_
-
+#pragma once
+#include "../lib_circle/circle.h"
+#include "../lib_point3d/point3d.h"
 
 class Sphere : public Circle {
     int _z;

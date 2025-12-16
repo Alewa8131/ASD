@@ -1,6 +1,10 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_LISTSTACK_LISTSTACK_H_
+#define LIB_LISTSTACK_LISTSTACK_H_
+#pragma once
 #include <stdexcept>
+
 #include "../lib_list/list.h"
 
 template <class T>
@@ -90,3 +94,5 @@ void ListStack<T>::clear() noexcept {
     }
     _top = -1;
 }
+
+#endif  // LIB_LISTSTACK_LISTSTACK_H_

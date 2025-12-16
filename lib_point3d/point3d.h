@@ -1,9 +1,9 @@
 // Copyright 2025 Alewa8131
 
-#include "../lib_point/point.h"
 #ifndef LIB_POINT3D_POINT3D_H_
 #define LIB_POINT3D_POINT3D_H_
-
+#pragma once
+#include "../lib_point/point.h"
 
 class Point3D : public Point {
     int _z;

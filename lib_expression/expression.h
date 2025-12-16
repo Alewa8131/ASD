@@ -1,5 +1,8 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_EXPRESSION_EXPRESSION_H_
+#define LIB_EXPRESSION_EXPRESSION_H_
+#pragma once
 #include <string>
 #include <stdexcept>
 #include <cmath>
@@ -193,3 +196,5 @@ const List<Lexem>& Expression::get_rpn() const {
 const List<Lexem>& Expression::get_variables() const {
     return _variables;
 }
+
+#endif  // LIB_EXPRESSION_EXPRESSION_H_

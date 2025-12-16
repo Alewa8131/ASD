@@ -2,10 +2,11 @@
 
 #ifndef LIB_TRIANGLE_MATRIX_TRIANGLE_MATRIX_H_
 #define LIB_TRIANGLE_MATRIX_TRIANGLE_MATRIX_H_
-
-#include "../lib_matrix/matrix.h"
+#pragma once
 #include <iostream>
 #include <string>
+
+#include "../lib_matrix/matrix.h"
 
 template <class T>
 class TriangleMatrix : public Matrix<T> {

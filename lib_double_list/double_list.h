@@ -1,6 +1,10 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_DOUBLELIST_DOUBLELIST_H_
+#define LIB_DOUBLELIST_DOUBLELIST_H_
+#pragma once
 #include <stdexcept>
+
 #include "../lib_node/node.h"
 
 template <class T>
@@ -338,3 +342,4 @@ bool DoubleList<T>::Iterator::operator!=(const Iterator& other) const {
     return _current != other._current;
 }
 
+#endif  // LIB_DOUBLELIST_DOUBLELIST_H_

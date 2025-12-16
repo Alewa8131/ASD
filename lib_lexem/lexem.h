@@ -1,5 +1,8 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_LEXEM_LEXEM_H_
+#define LIB_LEXEM_LEXEM_H_
+#pragma once
 #include <string>
 
 enum class TypeLexem {
@@ -43,3 +46,5 @@ struct Lexem {
     bool isOpenedAbs() const { return type == TypeLexem::OpenedAbs; }
     bool isClosedAbs() const { return type == TypeLexem::ClosedAbs; }
 };
+
+#endif  // LIB_LEXEM_LEXEM_H_

@@ -1,9 +1,9 @@
 // Copyright 2025 Alewa8131
 
-#include "../lib_point/point.h"
 #ifndef LIB_CIRCLE_CIRCLE_H_
 #define LIB_CIRCLE_CIRCLE_H_
-
+#pragma once
+#include "../lib_point/point.h"
 
 class Circle : public Point {
     int _r;

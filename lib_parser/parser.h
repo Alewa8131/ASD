@@ -1,6 +1,10 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_PARSER_PARSER_H_
+#define LIB_PARSER_PARSER_H_
+#pragma once
 #include <string>
+
 #include "../lib_list/list.h"
 #include "../lib_lexem/lexem.h"
 #include "../algorithms/read_expression.h"
@@ -226,3 +230,5 @@ namespace Parser {
         return output;
     }
 }
+
+#endif  // LIB_PARSER_PARSER_H_

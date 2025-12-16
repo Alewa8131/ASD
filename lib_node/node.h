@@ -1,5 +1,9 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_NODE_NODE_H_
+#define LIB_NODE_NODE_H_
+#pragma once
+
 template <class T>
 struct Node {
 public:
@@ -34,3 +38,5 @@ DoubleNode<T>::DoubleNode() : _prev(nullptr), _value(T()), _next(nullptr) {}
 template <class T>
 DoubleNode<T>::DoubleNode(T value, DoubleNode<T>* prev, DoubleNode<T>* next)
     : _value(value), _prev(prev), _next(next) {};
+
+#endif  // LIB_NODE_NODE_H_

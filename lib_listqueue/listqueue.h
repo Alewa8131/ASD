@@ -1,6 +1,10 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_LISTQUEUE_LISTQUEUE_H_
+#define LIB_LISTQUEUE_LISTQUEUE_H_
+#pragma once
 #include <stdexcept>
+
 #include "../lib_list/list.h"
 
 template <class T>
@@ -80,3 +84,5 @@ template<class T>
 bool ListQueue<T>::is_full() const noexcept {
     return _count == _size;
 }
+
+#endif  // LIB_LISTQUEUE_LISTQUEUE_H_

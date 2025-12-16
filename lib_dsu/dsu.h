@@ -1,5 +1,8 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_DSU_DSU_H_
+#define LIB_DSU_DSU_H_
+#pragma once
 #include <stdexcept>
 
 class DSU {
@@ -115,3 +118,5 @@ int count_islands(int(&grid)[R][C]) {
 
     return count;
 }
+
+#endif LIB_DSU_DSU_H_

@@ -2,6 +2,7 @@
 
 #ifndef LIB_POINT_POINT_H_
 #define LIB_POINT_POINT_H_
+#pragma once
 
 class Point {
     int _x, _y;

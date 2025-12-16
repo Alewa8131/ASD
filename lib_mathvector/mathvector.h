@@ -2,7 +2,7 @@
 
 #ifndef LIB_MATHVECTOR_MATHVECTOR_H_
 #define LIB_MATHVECTOR_MATHVECTOR_H_
-
+#pragma once
 #include "../lib_tvector/tvector.h"
 
 template <class T>

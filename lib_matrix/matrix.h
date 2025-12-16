@@ -2,10 +2,11 @@
 
 #ifndef LIB_MATRIX_MATRIX_H_
 #define LIB_MATRIX_MATRIX_H_
-
+#pragma once
 #include <iostream>
 #include <vector>
 #include <string>
+
 #include "../lib_mathvector/mathvector.h"
 
 template<class T>

@@ -1,5 +1,8 @@
 // Copyright 2025 Alewa8131
 
+#ifndef LIB_QUEUE_QUEUE_H_
+#define LIB_QUEUE_QUEUE_H_
+#pragma once
 #include <stdexcept>
 
 template <class T>
@@ -80,3 +83,5 @@ template<class T>
 bool Queue<T>::is_full() const noexcept {
     return _count == _size;
 }
+
+#endif  // LIB_QUEUE_QUEUE_H_

@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <iomanip>
+
 #include "../lib_circle/circle.h"
 
 int check_circle_position(Circle& c1, Circle& c2) {
@@ -107,6 +108,7 @@ int main() {
 #include <iostream>
 #include <iomanip>
 #include <exception>
+
 #include "../lib_matrix/matrix.h"
 #include "../lib_trianglematrix/trianglematrix.h"
 
@@ -244,6 +246,7 @@ int main() {
 
 #define EXPRESSION
 #ifdef EXPRESSION
+
 #include <iostream>
 #include <iomanip>
 #include <string>
