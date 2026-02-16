@@ -8,15 +8,14 @@
 #include <iostream>
 #include <string>
 
+#define vars_count 3
 class Monom {
 private:
     double _coef;
-    int _px;
-    int _py;
-    int _pz;
+    int _powers[vars_count];
 public:
-    Monom();
-    Monom(double coef, int px, int py, int pz);
+    Monom(double coef);
+    Monom(double coef, std::initializer_list<int> powers);
     Monom(const Monom& other);
 
     Monom& operator=(const Monom& other);
@@ -49,81 +48,112 @@ public:
 
 };
 
-Monom::Monom() : _coef(0), _px(0), _py(0), _pz(0) {}
-Monom::Monom(double coef, int px, int py, int pz)
-    : _coef(coef), _px(px), _py(py), _pz(pz) {
-    if (px < 0 || py < 0 || pz < 0)
-        throw std::invalid_argument("Negative power is not allowed");
+Monom::Monom(double coef = 0.0) : _coef(coef) {
+    for (int i = 0; i < vars_count; i++) {
+        _powers[i] = 0;
+    }
+}
+Monom::Monom(double coef, std::initializer_list<int> powers)
+    : _coef(coef) {
+    if (powers.size() != vars_count)
+        throw std::invalid_argument("Invalid number of powers");
+
+    int i = 0;
+    for (int p : powers) {
+        if (p < 0)
+            throw std::invalid_argument("Negative power is not allowed");
+
+        _powers[i++] = p;
+    }
 }
 Monom::Monom(const Monom& other)
-    : _coef(other._coef),
-    _px(other._px),
-    _py(other._py),
-    _pz(other._pz) {}
+    : _coef(other._coef)
+{
+    for (int i = 0; i < vars_count; ++i)
+        _powers[i] = other._powers[i];
+}
 
 Monom& Monom::operator=(const Monom& other) {
     if (this != &other) {
         _coef = other._coef;
-        _px = other._px;
-        _py = other._py;
-        _pz = other._pz;
+        for (int i = 0; i < vars_count; ++i)
+            _powers[i] = other._powers[i];
     }
     return *this;
 }
 bool Monom::operator==(const Monom & other) const {
-    return _px == other._px &&
-        _py == other._py &&
-        _pz == other._pz;
+    for (int i = 0; i < vars_count; ++i)
+        if (_powers[i] != other._powers[i])
+            return false;
+    return true;
 }
 bool Monom::operator!=(const Monom& other) const {
     return !(*this == other);
 }
 
 bool Monom::operator<(const Monom& other) const {
-    if (_px != other._px) return _px > other._px;
-    if (_py != other._py) return _py > other._py;
-    return _pz > other._pz;
+    for (int i = 0; i < vars_count; ++i) {
+        if (_powers[i] != other._powers[i])
+            return _powers[i] > other._powers[i];
+    }
+    return false;
 }
 
 Monom Monom::operator+(const Monom& other) const {
     if (*this != other)
         throw std::logic_error("Monoms are not similar");
-    return Monom(_coef + other._coef, _px, _py, _pz);
+    Monom result(*this);
+    result._coef += other._coef;
+    return result;
 }
 Monom Monom::operator-(const Monom& other) const {
     if (*this != other)
         throw std::logic_error("Monoms are not similar");
-    return Monom(_coef - other._coef, _px, _py, _pz);
+    Monom result(*this);
+    result._coef -= other._coef;
+    return result;
 }
 Monom Monom::operator*(const Monom& other) const {
-    return Monom(
-        _coef * other._coef,
-        _px + other._px,
-        _py + other._py,
-        _pz + other._pz
-    );
+    Monom result(_coef * other._coef);
+
+    for (int i = 0; i < vars_count; ++i)
+        result._powers[i] = _powers[i] + other._powers[i];
+
+    return result;
 }
 Monom Monom::operator/(const Monom& other) const {
     if (other._coef == 0)
         throw std::logic_error("Division by zero monom");
-    return Monom(
-        _coef / other._coef,
-        _px - other._px,
-        _py - other._py,
-        _pz - other._pz
-    );
+
+    Monom result(_coef / other._coef);
+
+    for (int i = 0; i < vars_count; ++i) {
+        int p = _powers[i] - other._powers[i];
+        if (p < 0)
+            throw std::logic_error("Negative power after division");
+        result._powers[i] = p;
+    }
+
+    return result;
 }
 
 Monom Monom::operator*(double value) const {
-    return Monom(_coef * value, _px, _py, _pz);
+    Monom result(*this);
+    result._coef *= value;
+    return result;
 }
 Monom Monom::operator/(double value) const {
     if (value == 0)
         throw std::logic_error("Division by zero");
-    return Monom(_coef / value, _px, _py, _pz);
+
+    Monom result(*this);
+    result._coef /= value;
+    return result;
 }
 Monom Monom::operator-() const {
-    return Monom(-_coef, _px, _py, _pz);
+    Monom result(*this);
+    result._coef = -_coef;
+    return result;
 }
 
 Monom& Monom::operator+=(const Monom& other) {
@@ -155,10 +185,13 @@ Monom& Monom::operator/=(double value) {
 }
 
 double Monom::value(double x, double y, double z) const {
-    return _coef *
-        pow(x, _px) *
-        pow(y, _py) *
-        pow(z, _pz);
+    double vars[vars_count] = { x, y, z };
+
+    double result = _coef;
+    for (int i = 0; i < vars_count; ++i)
+        result *= std::pow(vars[i], _powers[i]);
+
+    return result;
 }
 
 std::ostream& operator<<(std::ostream& os, const Monom& m) {
@@ -167,80 +200,77 @@ std::ostream& operator<<(std::ostream& os, const Monom& m) {
         return os;
     }
 
-    if (m._coef != 1 || (m._px == 0 && m._py == 0 && m._pz == 0)) {
+    bool is_constant = true;
+    for (int i = 0; i < vars_count; ++i)
+        if (m._powers[i] != 0)
+            is_constant = false;
+
+    if (m._coef != 1 || is_constant)
         os << m._coef;
-    }
 
-    if (m._px != 0) {
-        os << "x";
-        if (m._px != 1) os << "^" << m._px;
-    }
+    const char vars[vars_count] = { 'x','y','z' };
 
-    if (m._py != 0) {
-        os << "y";
-        if (m._py != 1) os << "^" << m._py;
-    }
-
-    if (m._pz != 0) {
-        os << "z";
-        if (m._pz != 1) os << "^" << m._pz;
+    for (int i = 0; i < vars_count; ++i) {
+        if (m._powers[i] != 0) {
+            os << vars[i];
+            if (m._powers[i] != 1)
+                os << "^" << m._powers[i];
+        }
     }
 
     return os;
 }
+
 std::istream& operator>>(std::istream& is, Monom& m) {
     std::string input;
     is >> input;
-
     if (!is) return is;
 
     double coef = 1.0;
-    int px = 0, py = 0, pz = 0;
+    int powers[vars_count] = { 0 };
 
     size_t i = 0;
 
-    if (input[i] == '-') {
-        coef = -1.0;
-        ++i;
-    }
-    else if (input[i] == '+') {
-        ++i;
-    }
-
+    if (input[i] == '-') { coef = -1.0; ++i; }
+    else if (input[i] == '+') { ++i; }
 
     size_t start = i;
     while (i < input.size() && (std::isdigit(input[i]) || input[i] == '.'))
         ++i;
 
-    if (i > start) {
+    if (i > start)
         coef *= std::stod(input.substr(start, i - start));
-    }
 
+    const char vars[vars_count] = { 'x','y','z' };
 
     while (i < input.size()) {
-        char var = input[i];
-        if (var != 'x' && var != 'y' && var != 'z') {
+        char var = input[i++];
+        int index = -1;
+
+        for (int j = 0; j < vars_count; ++j)
+            if (var == vars[j])
+                index = j;
+
+        if (index == -1) {
             is.setstate(std::ios::failbit);
             return is;
         }
-
-        ++i;
 
         int power = 1;
 
         if (i < input.size() && input[i] == '^') {
             ++i;
-            size_t power_start = i;
+            size_t pstart = i;
 
             while (i < input.size() && std::isdigit(input[i]))
                 ++i;
 
-            if (power_start == i) {
+            if (pstart == i) {
                 is.setstate(std::ios::failbit);
                 return is;
             }
 
-            power = std::stoi(input.substr(power_start, i - power_start));
+            power = std::stoi(input.substr(pstart, i - pstart));
         }
 
         if (power < 0) {
@@ -248,12 +278,10 @@ std::istream& operator>>(std::istream& is, Monom& m) {
             return is;
         }
 
-        if (var == 'x') px = power;
-        if (var == 'y') py = power;
-        if (var == 'z') pz = power;
+        powers[index] = power;
     }
 
-    m = Monom(coef, px, py, pz);
+    m = Monom(coef, { powers[0], powers[1], powers[2] });
     return is;
 }
 
