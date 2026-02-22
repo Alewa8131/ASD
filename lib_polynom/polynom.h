@@ -31,6 +31,11 @@ public:
     Polynom& operator*=(const Polynom& other);
     Polynom& operator*=(const Monom& m);
 
+    Polynom& operator=(const Polynom& other);
+
+    friend std::ostream& operator<<(std::ostream& os, const Polynom& p);
+    friend std::istream& operator>>(std::istream& is, Polynom& p);
+
     double value(double x, double y, double z) const;
     void normalize();
 };

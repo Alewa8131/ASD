@@ -116,13 +116,11 @@ Polynom& Polynom::operator+=(const Monom& m) {
             return *this;
         }
 
-        if (curr->_value < m) {
-
+        if (m < curr->_value) {
             if (prev == nullptr)
                 _polynom.push_front(m);
             else
                 _polynom.insert(prev, m);
-
             return *this;
         }
 
@@ -201,6 +199,51 @@ Polynom& Polynom::operator*=(const Monom& m) {
     return *this;
 }
 
+Polynom& Polynom::operator=(const Polynom& other) {
+    if (this != &other) {
+        _polynom = other._polynom;
+        _name = other._name;
+    }
+    return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const Polynom& p) {
+
+    if (p._polynom.head() == nullptr) {
+        os << "0";
+        return os;
+    }
+
+    bool first = true;
+
+    for (auto it = p._polynom.begin(); it != p._polynom.end(); ++it) {
+
+        if (!first && (*it).value(1, 1, 1) > 0)
+            os << "+";
+
+        os << *it;
+        first = false;
+    }
+
+    return os;
+}
+std::istream& operator>>(std::istream& is, Polynom& p) {
+
+    std::string line;
+    std::getline(is, line);
+
+    if (!is)
+        return is;
+
+    try {
+        p = Polynom(line);
+    }
+    catch (...) {
+        is.setstate(std::ios::failbit);
+    }
+
+    return is;
+}
 
 double Polynom::value(double x, double y, double z) const {
     double result = 0.0;

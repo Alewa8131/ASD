@@ -169,3 +169,110 @@ TEST(PolynomTest, ComplexExpression) {
 
     EXPECT_DOUBLE_EQ(val, expected);
 }
+
+TEST(PolynomTest, AssignmentOperator_Copy) {
+    Polynom p1("2x^2+3y-5");
+    Polynom p2;
+
+    p2 = p1;
+
+    EXPECT_DOUBLE_EQ(p1.value(2, 3, 1), p2.value(2, 3, 1));
+}
+
+TEST(PolynomTest, AssignmentOperator_SelfAssignment) {
+    Polynom p("2x^2+3y");
+
+    p = p;
+
+    EXPECT_DOUBLE_EQ(p.value(2, 2, 2), 2 * 4 + 3 * 2);
+}
+
+
+TEST(PolynomTest, Output_ZeroPolynom) {
+    Polynom p;
+
+    std::ostringstream oss;
+    oss << p;
+
+    EXPECT_EQ(oss.str(), "0");
+}
+
+TEST(PolynomTest, Output_ConstantPolynom) {
+    Polynom p("5");
+
+    std::ostringstream oss;
+    oss << p;
+
+    EXPECT_EQ(oss.str(), "5");
+}
+
+TEST(PolynomTest, Output_SimplePolynom) {
+    Polynom p("2x^2+3y");
+
+    std::ostringstream oss;
+    oss << p;
+
+    EXPECT_EQ(oss.str(), "2x^2+3y");
+}
+
+TEST(PolynomTest, Output_WithNegativeTerm) {
+    Polynom p("2x^2-3y");
+
+    std::ostringstream oss;
+    oss << p;
+
+    EXPECT_EQ(oss.str(), "2x^2-3y");
+}
+
+TEST(PolynomTest, Output_UnSortPolynom) {
+    Polynom p("6+y^2z^3 + 2y^2 + xy");
+
+    std::ostringstream oss;
+    oss << p;
+
+    EXPECT_EQ(oss.str(), "xy+y^2z^3+2y^2+6");
+}
+
+
+TEST(PolynomTest, Input_SimplePolynom) {
+    std::istringstream iss("2x^2+3y-5");
+    Polynom p;
+
+    iss >> p;
+
+    EXPECT_TRUE(iss);
+    EXPECT_DOUBLE_EQ(p.value(2, 3, 1), 2 * 4 + 3 * 3 - 5);
+}
+
+TEST(PolynomTest, Input_ConstantPolynom) {
+    std::istringstream iss("7");
+    Polynom p;
+
+    iss >> p;
+
+    EXPECT_TRUE(iss);
+    EXPECT_DOUBLE_EQ(p.value(1, 1, 1), 7);
+}
+
+TEST(PolynomTest, Input_InvalidPolynom) {
+    std::istringstream iss("2x^+3");
+    Polynom p;
+
+    iss >> p;
+
+    EXPECT_TRUE(iss.fail());
+}
+
+
+TEST(PolynomTest, IO_RoundTrip) {
+    Polynom p1("3x^2+2y-4z+7");
+
+    std::ostringstream oss;
+    oss << p1;
+
+    std::istringstream iss(oss.str());
+    Polynom p2;
+    iss >> p2;
+
+    EXPECT_DOUBLE_EQ(p1.value(2, 3, 4), p2.value(2, 3, 4));
+}
