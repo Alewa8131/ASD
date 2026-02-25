@@ -244,7 +244,7 @@ int main() {
 
 #endif  // MATRIX
 
-#define EXPRESSION
+//#define EXPRESSION
 #ifdef EXPRESSION
 
 #include <iostream>
@@ -467,3 +467,24 @@ int main() {
     return 0;
 }
 #endif  // EXPRESSION
+
+#define BACKROOMS
+#ifdef BACKROOMS
+
+#include "../algorithms/DSUBackRooms.h"
+
+
+int main() {
+    std::srand(std::time(0));
+    try {
+        print(generate(9, 58, 8, 8));
+
+    }
+    catch (const std::exception& e) {
+        std::cout << "" << e.what() << "\n";
+    }
+
+    return 0;
+}
+
+#endif  // BACKROOMS
