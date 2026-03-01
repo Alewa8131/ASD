@@ -468,7 +468,7 @@ int main() {
 }
 #endif  // EXPRESSION
 
-#define BACKROOMS
+//#define BACKROOMS
 #ifdef BACKROOMS
 
 #include "../algorithms/DSUBackRooms.h"
@@ -488,3 +488,27 @@ int main() {
 }
 
 #endif  // BACKROOMS
+
+#define SKIPLIST
+#ifdef SKIPLIST
+
+#include "../lib_skiplist/skiplist.h"
+
+int main() {
+    SkipList<int, std::string> list(10);
+
+    list.insert(3, "A");
+    list.insert(4, "B");
+    list.insert(5, "C");
+    list.insert(7, "D");
+    list.insert(9, "E");
+
+    list.print();
+    std::cout << "----------------\n";
+
+    list.insert(10, "F");
+    list.insert(2, "G");
+
+    list.print();
+}
+#endif  // SKIPLISST
