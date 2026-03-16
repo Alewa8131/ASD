@@ -10,36 +10,27 @@
 template <class T>
 class ListQueue {
     List<T>* _data;
-    int _size, _count;
+    int _count;
 public:
     ListQueue();
-    ListQueue(int size);
     ListQueue(const ListQueue& other);
     ~ListQueue();
     void push(T val);
     void pop();
     inline T head() const;
     inline bool is_empty() const noexcept;
-    inline bool is_full() const noexcept;
 };
 
 template<class T>
-ListQueue<T>::ListQueue() : _size(0), _count(0) {
-    _data = new List<T>();
-}
-
-template<class T>
-ListQueue<T>::ListQueue(int size) : _size(size), _count(0) {
-    if (size < 0) throw std::invalid_argument("Queue size cannot be negative.");
+ListQueue<T>::ListQueue() : _count(0) {
     _data = new List<T>();
 }
 
 template <class T>
-ListQueue<T>::ListQueue(const ListQueue& other) :
-    _size(other._size),
-    _count(other._count) {
+ListQueue<T>::ListQueue(const ListQueue& other) : _count(other._count) {
     _data = new List<T>();
-    for (List<int>::Iterator it = other._data->begin(); it != other._data->end(); ++it) {
+    for (typename List<T>::Iterator it = other._data->begin(); 
+        it != other._data->end(); ++it) {
         _data->push_back(*it);
     }
 }
@@ -51,9 +42,6 @@ ListQueue<T>::~ListQueue() {
 
 template<class T>
 void ListQueue<T>::push(T val) {
-    if (is_full()) {
-        throw std::out_of_range("Queue is full, cannot push.");
-    }
     _data->push_back(val);
     _count++;
 }
@@ -78,11 +66,6 @@ inline T ListQueue<T>::head() const {
 template<class T>
 bool ListQueue<T>::is_empty() const noexcept {
     return _count == 0;
-}
-
-template<class T>
-bool ListQueue<T>::is_full() const noexcept {
-    return _count == _size;
 }
 
 #endif  // LIB_LISTQUEUE_LISTQUEUE_H_

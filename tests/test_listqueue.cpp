@@ -1,29 +1,23 @@
-// Copyright 2025 Alewa8131
+// Copyright 2026 Alewa8131
 
 #include <gtest/gtest.h>
 #include "../lib_listqueue/listqueue.h"
 
-
-TEST(ListQueueTest, Constructor_Error_NegativeSize) {
-    EXPECT_THROW(ListQueue<int> q(-1), std::invalid_argument);
+TEST(ListQueueTest, Constructor) {
+    ListQueue<int> q;
+    EXPECT_TRUE(q.is_empty());
 }
 
-TEST(ListQueueTest, StatusFunctions) {
-    ListQueue<int> q(2);
-
-    EXPECT_TRUE(q.is_empty());
-    EXPECT_FALSE(q.is_full());
+TEST(ListQueueTest, PushChangesState) {
+    ListQueue<int> q;
 
     q.push(1);
-    EXPECT_FALSE(q.is_empty());
-    EXPECT_FALSE(q.is_full());
 
-    q.push(2);
-    EXPECT_TRUE(q.is_full());
+    EXPECT_FALSE(q.is_empty());
 }
 
 TEST(ListQueueTest, Basic_PushPop) {
-    ListQueue<int> q(5);
+    ListQueue<int> q;
     ASSERT_TRUE(q.is_empty());
 
     q.push(10);
@@ -39,7 +33,7 @@ TEST(ListQueueTest, Basic_PushPop) {
 }
 
 TEST(ListQueueTest, WrapAroundLogic) {
-    ListQueue<int> q(3);
+    ListQueue<int> q;
 
     q.push(1); // 1
     q.push(2); // 1 2
@@ -59,33 +53,24 @@ TEST(ListQueueTest, WrapAroundLogic) {
     ASSERT_TRUE(q.is_empty());
 }
 
+TEST(ListQueueTest, LargeSequence) {
+    ListQueue<int> q;
 
-TEST(ListQueueTest, Push_Error_Overflow) {
-    ListQueue<int> q(2);
-    q.push(1);
-    q.push(2);
+    for (int i = 0; i < 100; ++i)
+        q.push(i);
 
-    ASSERT_TRUE(q.is_full());
-    EXPECT_THROW(q.push(3), std::out_of_range);
-}
-TEST(ListQueueTest, Push_Error_Overflow_AfterPop) {
-    ListQueue<int> q(2);
-    q.push(1);
-    q.pop();
-    q.push(2);
-    q.push(3);
-
-    EXPECT_THROW(q.push(4), std::out_of_range);
-    ASSERT_EQ(2, q.head());
+    for (int i = 0; i < 100; ++i) {
+        ASSERT_EQ(i, q.head());
+        q.pop();
+    }
 }
 
-
-TEST(ListQueueTest, Pop_Error_Underflow_Empty) {
-    ListQueue<int> q(5);
+TEST(ListQueueTest, Pop_Error_Empty) {
+    ListQueue<int> q;
     EXPECT_THROW(q.pop(), std::out_of_range);
 }
-TEST(ListQueueTest, Pop_Error_Underflow_AfterPopAll) {
-    ListQueue<int> q(1);
+TEST(ListQueueTest, Pop_Error_AfterPopAll) {
+    ListQueue<int> q;
     q.push(10);
     q.pop();
 
@@ -93,13 +78,12 @@ TEST(ListQueueTest, Pop_Error_Underflow_AfterPopAll) {
     ASSERT_TRUE(q.is_empty());
 }
 
-
 TEST(ListQueueTest, Head_Error_Empty) {
-    ListQueue<int> q(5);
+    ListQueue<int> q;
     EXPECT_THROW(q.head(), std::out_of_range);
 }
 TEST(ListQueueTest, Head_Error_AfterCycle) {
-    ListQueue<int> q(2);
+    ListQueue<int> q;
     q.push(1);
     q.push(2);
     q.pop();
