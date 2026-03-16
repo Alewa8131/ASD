@@ -37,6 +37,7 @@ add_subdirectory(lib_expression)      # подключаем дополните�
 add_subdirectory(lib_polynom)         # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_polynom
 add_subdirectory(lib_table)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_table
 add_subdirectory(lib_skiplist)        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_skiplist
+add_subdirectory(lib_tree)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tree
 add_subdirectory(Algorithms)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем Algorithms
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
