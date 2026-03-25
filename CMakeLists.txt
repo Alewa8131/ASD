@@ -14,32 +14,33 @@ include(cmake/function.cmake)         # подхватываем функции,
 								      # и для создания исполняемого проекта в отдельные функции
 
 add_subdirectory(lib_easy_example)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
-add_subdirectory(lib_point)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_point
-add_subdirectory(lib_point3d)         # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_point3d
-add_subdirectory(lib_circle)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_circle
-add_subdirectory(lib_sphere)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_sphere
-add_subdirectory(lib_tvector)         # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tvector
-add_subdirectory(lib_mathvector)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_mathvector
-add_subdirectory(lib_matrix)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_matrix
-add_subdirectory(lib_trianglematrix)  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_trianglematrix
-add_subdirectory(lib_stack)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack
-add_subdirectory(lib_queue)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue
-add_subdirectory(lib_priority_queue)  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_priority_queue
-add_subdirectory(lib_node)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_node
-add_subdirectory(lib_list)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_list
-add_subdirectory(lib_double_list)     # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_double_list
-add_subdirectory(lib_liststack)       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_liststack
-add_subdirectory(lib_listqueue)       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_listqueue
-add_subdirectory(lib_dsu)             # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_dsu
-add_subdirectory(lib_lexem)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_lexem
-add_subdirectory(lib_parser)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_parser
-add_subdirectory(lib_expression)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_expression
-add_subdirectory(lib_polynom)         # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_polynom
-add_subdirectory(lib_table)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_table
-add_subdirectory(lib_skiplist)        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_skiplist
-add_subdirectory(lib_tree)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tree
-add_subdirectory(Algorithms)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем Algorithms
-add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+add_subdirectory(lib_point)
+add_subdirectory(lib_point3d)
+add_subdirectory(lib_circle)
+add_subdirectory(lib_sphere)
+add_subdirectory(lib_tvector)
+add_subdirectory(lib_mathvector)
+add_subdirectory(lib_matrix)
+add_subdirectory(lib_trianglematrix)
+add_subdirectory(lib_stack)
+add_subdirectory(lib_queue)
+add_subdirectory(lib_priority_queue)
+add_subdirectory(lib_node)
+add_subdirectory(lib_list)
+add_subdirectory(lib_double_list)
+add_subdirectory(lib_liststack)
+add_subdirectory(lib_listqueue)
+add_subdirectory(lib_dsu)
+add_subdirectory(lib_lexem)
+add_subdirectory(lib_parser)
+add_subdirectory(lib_expression)
+add_subdirectory(lib_polynom)
+add_subdirectory(lib_table)
+add_subdirectory(lib_skiplist)
+add_subdirectory(lib_tree)
+add_subdirectory(lib_bstree)
+add_subdirectory(Algorithms)
+add_subdirectory(main)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
@@ -49,5 +50,4 @@ if(BTEST)                             # если тесты подключены
     enable_testing()
     add_subdirectory(tests)
 endif()
-
 
