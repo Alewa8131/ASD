@@ -39,6 +39,7 @@ add_subdirectory(lib_table)
 add_subdirectory(lib_skiplist)
 add_subdirectory(lib_tree)
 add_subdirectory(lib_bstree)
+add_subdirectory(lib_heap)
 add_subdirectory(Algorithms)
 add_subdirectory(main)
 

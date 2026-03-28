@@ -489,7 +489,7 @@ int main() {
 
 #endif  // BACKROOMS
 
-#define SKIPLIST
+//#define SKIPLIST
 #ifdef SKIPLIST
 
 #include "../lib_skiplist/skiplist.h"
@@ -511,4 +511,25 @@ int main() {
 
     list.print();
 }
-#endif  // SKIPLISST
+#endif  // SKIPLIST
+
+#define HEAP
+#ifdef HEAP
+
+#include "../lib_heap/heap.h"
+
+int main() {
+    Heap<int> h;
+    h.insert(6);
+    h.insert(3);
+    h.insert(2);
+    h.insert(4);
+    h.insert(1);
+
+    h.print();
+
+    h.pop();
+
+    h.print();
+}
+#endif  // HEAP
