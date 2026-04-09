@@ -534,7 +534,7 @@ int main() {
 }
 #endif  // HEAP
 
-#define PRIORITYHEAPQUEUE
+//#define PRIORITYHEAPQUEUE
 #ifdef PRIORITYHEAPQUEUE
 
 #include "../lib_priority_heap_queue/priority_heap_queue.h"
@@ -557,3 +557,45 @@ int main() {
     }
 }
 #endif  // PRIORITYHEAPQUEUE
+
+#define HASH_TABLE
+#ifdef HASH_TABLE
+
+#include <iostream>
+#include <string>
+#include "../lib_table/HashTableC.h"
+
+int main() {
+    HashTableC<int> dict1(101);
+    dict1.insert("Table", 73738);
+    dict1.insert("OOP", 9238);
+    dict1.insert("Hash-function", 38);
+    dict1.insert("Vector", 3938);
+
+
+    HashTableC<int> dict2(101);
+    dict2.insert("Interface", 73898);
+    dict2.insert("Vector", 11387);
+    dict2.insert("Hash-function", 33928);
+    dict2.insert("List", 9284);
+
+    for (size_t i = 0; i < dict2.count(); ++i) {
+        std::string key = dict2.get_key_at(i);
+        int value = dict2.get_value_at(i);
+
+        try {
+            dict1.insert(key, value);
+        }
+        catch (const std::logic_error&) {}
+    }
+
+    std::cout << "Successfully merged. Total elements: " << dict1.count() << std::endl;
+    std::cout << "--- Final Dictionary ---" << std::endl;
+
+    for (size_t i = 0; i < dict1.count(); ++i) {
+        std::cout << dict1.get_key_at(i) << ": " << dict1.get_value_at(i) << std::endl;
+    }
+
+    return 0;
+}
+#endif // HASH_TABLE
