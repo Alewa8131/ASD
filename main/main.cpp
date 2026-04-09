@@ -513,7 +513,7 @@ int main() {
 }
 #endif  // SKIPLIST
 
-#define HEAP
+//#define HEAP
 #ifdef HEAP
 
 #include "../lib_heap/heap.h"
@@ -533,3 +533,27 @@ int main() {
     h.print();
 }
 #endif  // HEAP
+
+#define PRIORITYHEAPQUEUE
+#ifdef PRIORITYHEAPQUEUE
+
+#include "../lib_priority_heap_queue/priority_heap_queue.h"
+
+int main() {
+    PriorityHeapQueue<std::string> pq;
+    pq.push("Vasily", 2);
+    pq.push("Leonid Vasilievich", 1);
+    pq.push("Petka", 4);
+    pq.push("Ivan Ivanovich", 1);
+    pq.push("Vasya", 3);
+    pq.push("Vasilisa", 2);
+
+    int k = 5;
+    std::cout << "The " << k << " most important elements in order:" << std::endl;
+    for (int i = 0; i < k; ++i) {
+        if (!pq.is_empty()) {
+            std::cout << '"' << pq.pop() << '"' << std::endl;
+        }
+    }
+}
+#endif  // PRIORITYHEAPQUEUE
