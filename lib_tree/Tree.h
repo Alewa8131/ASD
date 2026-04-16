@@ -14,24 +14,25 @@ class Tree {
     using Node = DoubleNode<Row>;
 
     Node* _root;
+
 public:
     Tree();
     ~Tree();
-    void insert(const TKey&, const TValue&);
-    TValue& find(const TKey&) const;
-    void erase(const TKey&);
+    TValue* find(const TKey& key) const;
+    void insert(const TKey& key, const TValue& val);
+    void erase(const TKey& key);
     bool is_empty() const noexcept;
 
-    void print_W() const noexcept;
-    void print_DLCR() const noexcept;
-    void print_DLRC() const noexcept;
-    void print_DCLR() const noexcept;
-    void print_DLCR_rec(Node*) const noexcept;
-    void print_DLRC_rec(Node*) const noexcept;
-    void print_DCLR_rec(Node*) const noexcept;
+    void print_W(std::ostream& os = std::cout) const noexcept;
+    void print_DLCR(std::ostream& os = std::cout) const noexcept;
+    void print_DLRC(std::ostream& os = std::cout) const noexcept;
+    void print_DCLR(std::ostream& os = std::cout) const noexcept;
+    void print_DLCR_rec(Node* node, std::ostream& os) const noexcept;
+    void print_DLRC_rec(Node* node, std::ostream& os) const noexcept;
+    void print_DCLR_rec(Node* node, std::ostream& os) const noexcept;
 
     void clear() noexcept;
-    void clear_rec(Node*) noexcept;
+    void clear_rec(Node* node) noexcept;
 };
 
 template<class TKey, class TValue>
@@ -44,11 +45,11 @@ Tree<TKey, TValue>::~Tree() {
 
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::insert(const TKey& key, const TValue& val) {
-    try {
-        find(key);
+void Tree<TKey, TValue>::
+insert(const TKey& key, const TValue& val) {
+    if (find(key) != nullptr) {
         throw std::logic_error("Key already exists");
-    } catch (const std::out_of_range&) {}
+    }
 
     Node* node = new Node({ key, val });
 
@@ -66,7 +67,7 @@ void Tree<TKey, TValue>::insert(const TKey& key, const TValue& val) {
         if (!cur->_prev) {
             cur->_prev = node;
             return;
-        } 
+        }
         if (!cur->_next) {
             cur->_next = node;
             return;
@@ -77,9 +78,9 @@ void Tree<TKey, TValue>::insert(const TKey& key, const TValue& val) {
 }
 
 template<class TKey, class TValue>
-TValue& Tree<TKey, TValue>::find(const TKey& key) const {
-    if (is_empty()) 
-        throw std::out_of_range("Key not found");
+TValue* Tree<TKey, TValue>::
+find(const TKey& key) const {
+    if (is_empty()) return nullptr;
 
     ListQueue<Node*> q;
     q.push(_root);
@@ -89,7 +90,7 @@ TValue& Tree<TKey, TValue>::find(const TKey& key) const {
         q.pop();
 
         if (cur->_value.first == key) {
-            return cur->_value.second;
+            return &(cur->_value.second);
         }
         if (cur->_prev) {
             q.push(cur->_prev);
@@ -98,11 +99,12 @@ TValue& Tree<TKey, TValue>::find(const TKey& key) const {
             q.push(cur->_next);
         }
     }
-    throw std::out_of_range("Key not found");
+    return nullptr;
 }
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::erase(const TKey& key) {
+void Tree<TKey, TValue>::
+erase(const TKey& key) {
     if (is_empty())
         throw std::out_of_range("Key not found");
 
@@ -150,13 +152,15 @@ void Tree<TKey, TValue>::erase(const TKey& key) {
 }
 
 template<class TKey, class TValue>
-bool Tree<TKey, TValue>::is_empty() const noexcept {
+bool Tree<TKey, TValue>::
+is_empty() const noexcept {
     return _root == nullptr;
 }
 
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::print_W() const noexcept {
+void Tree<TKey, TValue>::
+print_W(std::ostream& os) const noexcept {
     if (is_empty())
         return;
     ListQueue<Node*> q;
@@ -164,7 +168,7 @@ void Tree<TKey, TValue>::print_W() const noexcept {
     Node* cur = nullptr;
     while (!q.is_empty()) {
         cur = q.head();
-        std::cout << cur->_value.second << " ";
+        os << cur->_value.second << " ";
         q.pop();
         if (cur->_prev)
             q.push(cur->_prev);
@@ -174,50 +178,57 @@ void Tree<TKey, TValue>::print_W() const noexcept {
 }
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::print_DLCR() const noexcept {
-    print_DLCR_rec(_root);
+void Tree<TKey, TValue>::
+print_DLCR(std::ostream& os) const noexcept {
+    print_DLCR_rec(_root, os);
 }
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::print_DLRC() const noexcept {
-    print_DLRC_rec(_root);
+void Tree<TKey, TValue>::
+print_DLRC(std::ostream& os) const noexcept {
+    print_DLRC_rec(_root, os);
 }
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::print_DCLR() const noexcept {
-    print_DCLR_rec(_root);
+void Tree<TKey, TValue>::
+print_DCLR(std::ostream& os) const noexcept {
+    print_DCLR_rec(_root, os);
 }
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::print_DLCR_rec(Node* node) const noexcept {
+void Tree<TKey, TValue>::
+print_DLCR_rec(Node* node, std::ostream& os) const noexcept {
     if (!node)
         return;
-    print_DLCR_rec(node->_prev);
-    std::cout << node->_value.second << " ";
-    print_DLCR_rec(node->_next);
+    print_DLCR_rec(node->_prev, os);
+    os << node->_value.second << " ";
+    print_DLCR_rec(node->_next, os);
 }
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::print_DLRC_rec(Node* node) const noexcept {
+void Tree<TKey, TValue>::
+print_DLRC_rec(Node* node, std::ostream& os) const noexcept {
     if (!node)
         return;
-    print_DLRC_rec(node->_prev);
-    print_DLRC_rec(node->_next);
-    std::cout << node->_value.second << " ";
+    print_DLRC_rec(node->_prev, os);
+    print_DLRC_rec(node->_next, os);
+    os << node->_value.second << " ";
 }
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::print_DCLR_rec(Node* node) const noexcept {
+void Tree<TKey, TValue>::
+print_DCLR_rec(Node* node, std::ostream& os) const noexcept {
     if (!node)
         return;
-    std::cout << node->_value.second << " ";
-    print_DCLR_rec(node->_prev);
-    print_DCLR_rec(node->_next);
+    os << node->_value.second << " ";
+    print_DCLR_rec(node->_prev, os);
+    print_DCLR_rec(node->_next, os);
 }
 
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::clear() noexcept {
+void Tree<TKey, TValue>::
+clear() noexcept {
     if (!_root)
         return;
     clear_rec(_root);
@@ -225,7 +236,8 @@ void Tree<TKey, TValue>::clear() noexcept {
 }
 
 template<class TKey, class TValue>
-void Tree<TKey, TValue>::clear_rec(Node* node) noexcept {
+void Tree<TKey, TValue>::
+clear_rec(Node* node) noexcept {
     if (!node)
         return;
     clear_rec(node->_prev);

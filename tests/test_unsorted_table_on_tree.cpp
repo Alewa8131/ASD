@@ -1,18 +1,18 @@
 // Copyright 2026 Alewa8131
 
 #include <gtest/gtest.h>
-#include "../lib_tree/Tree.h"
+#include "../lib_table/UnsortedTableOnTree.h"
 
 TEST(UnsortedTableOnTree, EmptyTree) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     EXPECT_TRUE(tree.is_empty());
 }
 
 TEST(UnsortedTableOnTree, InsertOneElement) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 10);
 
@@ -22,7 +22,7 @@ TEST(UnsortedTableOnTree, InsertOneElement) {
 
 TEST(UnsortedTableOnTree, InsertSeveralElements) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 10);
     tree.insert("B", 20);
@@ -35,7 +35,7 @@ TEST(UnsortedTableOnTree, InsertSeveralElements) {
 
 TEST(UnsortedTableOnTree, DuplicateInsertThrows) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 10);
 
@@ -47,7 +47,7 @@ TEST(UnsortedTableOnTree, DuplicateInsertThrows) {
 
 TEST(UnsortedTableOnTree, FindNonExistingThrows) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 10);
 
@@ -59,7 +59,7 @@ TEST(UnsortedTableOnTree, FindNonExistingThrows) {
 
 TEST(UnsortedTableOnTree, EraseElement) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 10);
     tree.insert("B", 20);
@@ -78,7 +78,7 @@ TEST(UnsortedTableOnTree, EraseElement) {
 
 TEST(UnsortedTableOnTree, EraseNonExistingThrows) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 10);
 
@@ -90,7 +90,7 @@ TEST(UnsortedTableOnTree, EraseNonExistingThrows) {
 
 TEST(UnsortedTableOnTree, InsertEraseInsert) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 1);
     tree.erase("A");
@@ -104,7 +104,7 @@ TEST(UnsortedTableOnTree, InsertEraseInsert) {
 
 TEST(UnsortedTableOnTree, FindReturnsReference) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 10);
 
@@ -115,7 +115,7 @@ TEST(UnsortedTableOnTree, FindReturnsReference) {
 
 TEST(UnsortedTableOnTree, ConstFindWorks) {
 
-    Tree<std::string, int> tree;
+    UnsortedTableOnTree<std::string, int> tree;
 
     tree.insert("A", 10);
     tree.insert("B", 20);
@@ -128,7 +128,7 @@ TEST(UnsortedTableOnTree, ConstFindWorks) {
 
 TEST(UnsortedTableOnTree, ManyElements) {
 
-    Tree<int, int> tree;
+    UnsortedTableOnTree<int, int> tree;
 
     for (int i = 0; i < 100; i++)
         tree.insert(i, i * 10);
@@ -139,7 +139,7 @@ TEST(UnsortedTableOnTree, ManyElements) {
 
 TEST(UnsortedTableOnTree, RemoveAllElements) {
 
-    Tree<int, int> tree;
+    UnsortedTableOnTree<int, int> tree;
 
     tree.insert(1, 10);
     tree.insert(2, 20);
