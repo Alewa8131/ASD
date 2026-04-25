@@ -558,7 +558,7 @@ int main() {
 }
 #endif  // PRIORITYHEAPQUEUE
 
-#define HASH_TABLE
+//#define HASH_TABLE
 #ifdef HASH_TABLE
 
 #include <iostream>
@@ -599,3 +599,63 @@ int main() {
     return 0;
 }
 #endif // HASH_TABLE
+
+#define GRAPH
+#ifdef GRAPH
+
+#include <iostream>
+#include <string>
+#include "../lib_graph_types/graph_types.h"
+
+/*
+  4 ---- 6
+ / \      \
+1    \      3
+ \___ 2 ___/ \
+     /        \
+    5 -------- 0
+Vector<Vertex<T>>  Vertex(T, size_t)
+
+Vector<List<Vertex<T>*>>
+0 (3)->(5)
+1 (2)->(4)
+2 (1)->(3)->(4)->(5)
+3 (0)->(2)->(6)
+4 (1)->(2)->(6)
+5 (0)->(2)
+6 (3)->(4)
+*/
+
+int main() {
+    std::cout << "=== Testing AdjacencyLists with std::string ===" << std::endl;
+
+    TVector<std::pair<std::pair<std::string, std::string>, size_t>> init_data;
+
+    init_data.push_back({ {"V4", "V6"}, 8 });
+    init_data.push_back({ {"V4", "V1"}, 10 });
+    init_data.push_back({ {"V5", "V2"}, 5 });
+    init_data.push_back({ {"V6", "V3"}, 56 });
+    init_data.push_back({ {"V1", "V2"}, 7 });
+    init_data.push_back({ {"V0", "V5"}, 2 });
+    init_data.push_back({ {"V3", "V2"}, 10 });
+    init_data.push_back({ {"V4", "V2"}, 12 });
+    init_data.push_back({ {"V0", "V3"}, 33 });
+
+    Graph<std::string> graph(init_data, false, true);
+
+    std::cout << "\nInitial graph structure:" << std::endl;
+    graph.print();
+
+    std::cout << "\nRemoving edge between V6 and V3..." << std::endl;
+    graph.delete_edge("V6", "V3");
+    graph.print();
+
+    std::cout << "\nRemoving vertex V4..." << std::endl;
+    graph.delete_vertex("V4");
+    graph.print();
+
+    std::cout << "\n=== Test Finished Successfully ===" << std::endl;
+    return 0;
+}
+
+#endif  // GRAPH
