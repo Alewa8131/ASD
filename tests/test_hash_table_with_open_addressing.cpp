@@ -132,15 +132,19 @@ TEST(HashTableOA, FillToCapacity) {
 TEST(HashTableOA, CollisionHandling) {
     HashTableOA<int> table(5);
 
-    table.insert("key1", 1);
-    table.insert("key2", 2);
-    table.insert("key3", 3);
+    table.insert("aA", 1);
+    table.insert("aF", 2);
+    table.insert("aK", 3);
 
-    EXPECT_EQ(table.find("key1"), 1);
-    EXPECT_EQ(table.find("key2"), 2);
-    EXPECT_EQ(table.find("key3"), 3);
+    EXPECT_EQ(table.find("aA"), 1);  // hash = 97 * 31 + 65 = 3007 + 65 = 3072
+    EXPECT_EQ(table.find("aF"), 2);  // hash = 97 * 31 + 70 = 3007 + 70 = 3077
+    EXPECT_EQ(table.find("aK"), 3);  // hash = 97 * 31 + 75 = 3007 + 75 = 3082
 
-    table.erase("key2");
+    table.erase("aF");
 
-    EXPECT_EQ(table.find("key3"), 3);
+    EXPECT_EQ(table.find("aK"), 3);
+
+    EXPECT_THROW(table.find("aF"), std::out_of_range);
+
+    EXPECT_NO_THROW(table.insert("aF", 2));
 }
