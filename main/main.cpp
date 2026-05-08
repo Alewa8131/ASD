@@ -473,12 +473,13 @@ int main() {
 
 #include "../algorithms/DSUBackRooms.h"
 
-
 int main() {
     std::srand(std::time(0));
     try {
-        print(generate(9, 58, 8, 8));
-
+        Matrix<bool> lab = generate(9, 58, 8, 8);
+        print(lab);
+        std::cout << "\n";
+        print_way(lab);
     }
     catch (const std::exception& e) {
         std::cout << "" << e.what() << "\n";
@@ -600,7 +601,7 @@ int main() {
 }
 #endif // HASH_TABLE
 
-#define GRAPH
+//#define GRAPH
 #ifdef GRAPH
 
 #include <iostream>
@@ -659,3 +660,48 @@ int main() {
 }
 
 #endif  // GRAPH
+
+#define DIJKSTRA
+#ifdef DIJKSTRA
+
+#include "../algorithms/dijkstra.h"
+
+int main() {
+    Graph<int> graph(false, true);
+
+    graph.add_edge(1, 6, 14);
+    graph.add_edge(1, 3, 9);
+    graph.add_edge(1, 2, 7);
+    graph.add_edge(6, 5, 9);
+    graph.add_edge(6, 3, 2);
+    graph.add_edge(3, 2, 10);
+    graph.add_edge(3, 4, 11);
+    graph.add_edge(5, 4, 6);
+    graph.add_edge(2, 4, 15);
+
+    DijkstraResult result = dijkstra<int>(4, graph);
+    auto& lists = graph.get_lists();
+    size_t vertices_count = lists.get_vertices_count();
+
+    for (size_t i = 0; i < vertices_count; ++i) {
+        int current_val = lists.get_vertex_by_idx(i)->_value;
+
+        if (result.dist[i] == INT_INF) {
+            std::cout << "Vertex " << current_val << ": unreachable" << std::endl;
+        }
+        else {
+            std::cout << "Vertex " << current_val << ": distance = " << result.dist[i];
+            if (result.parent[i] != -1) {
+                int parent_val = lists.get_vertex_by_idx(result.parent[i])->_value;
+                std::cout << ", parent = " << parent_val << std::endl;
+            }
+            else {
+                std::cout << ", parent = -1 (Source)" << std::endl;
+            }
+        }
+    }
+
+    return 0;
+}
+
+#endif  // DIJKSTRA

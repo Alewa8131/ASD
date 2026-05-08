@@ -46,6 +46,11 @@ public:
         bool oriented = false, bool weighted = false);
     ~AdjacencyLists();
 
+    size_t get_vertices_count() const;
+    const List<Edge<T>>& get_edges_list(size_t idx) const;
+    Vertex<T>* get_vertex_by_idx(size_t idx) const;
+    Vertex<T>* find_vertex(T val);
+
     void add_edge(T from, T to, int weight = 1);
     void delete_edge(T v1, T v2);
     void delete_vertex(T v);
@@ -79,6 +84,31 @@ AdjacencyLists<T>::
         delete _vertices[i];
     }
 }
+
+template<class T>
+size_t AdjacencyLists<T>::
+get_vertices_count() const {
+    return _vertices.size();
+}
+
+template<class T>
+const List<Edge<T>>& AdjacencyLists<T>::
+get_edges_list(size_t idx) const {
+    return _data[idx];
+}
+
+template<class T>
+Vertex<T>* AdjacencyLists<T>::
+get_vertex_by_idx(size_t idx) const {
+    return _vertices[idx];
+}
+
+template<class T>
+Vertex<T>* AdjacencyLists<T>::
+find_vertex(T val) {
+    return find_main(val);
+}
+
 
 template<class T>
 void AdjacencyLists<T>::
