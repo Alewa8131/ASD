@@ -42,6 +42,7 @@ add_subdirectory(lib_bstree)
 add_subdirectory(lib_heap)
 add_subdirectory(lib_priority_heap_queue)
 add_subdirectory(lib_graph_types)
+add_subdirectory(lib_avltree)
 add_subdirectory(Algorithms)
 add_subdirectory(main)
 
